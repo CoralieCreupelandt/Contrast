@@ -139,18 +139,9 @@ output = nomExp + "_Ps" + str(numSs) + "_" + time.strftime("%Y-%m-%d_%Hh%M") + "
 fileName = output
 dataFile = open(fileName + '.csv', 'w')
 dataFile.write('baseValue       contrastValue     exactitude      seuil\n')
-d = pd.read_csv(fileName+".csv", sep=';')
-
-## VALUES
-####################################################
-d["initValue"]=0
-d["actualValue"]=0
-d["exactitude"]=0
-d["seuil"]=0
 
 ## CARRES ET AUTRES OBJETS UTILES
 ####################################################
-#creation des 20 carres (4 positions pour chacune des 5 initValue)
 
 w = visual.Window([800,600],color="grey",units='pix')
 
