@@ -64,10 +64,19 @@ def launchExpe(tab):
     #if one of the counters reach 4, we stop (or actually if the tester reaches the hardest test and succeed we could also stop?)
     tableauDeFails = [0, 0, 0, 0, 0, 0, 0]
     actualDifficulty = 0
-    basicContrast = carres[1].contrast #sauvegarde le contrast par defaut des 4 carres
+    basicContrast = carres[1].contrast #sauvegarde le contrast par défaut des 4 carres
+
+    for frameN in range(300): #TODO: Should be 3600
+        w.flip()
+    
+    for frameN in range(300):
+        carres[1].draw()
+        carres[2].draw()
+        carres[4].draw()
+        carres[5].draw()
+        w.flip()
 
     while(True):
-        
 
         HISI = core.Clock()
         while HISI.getTime() < 1:
@@ -76,22 +85,19 @@ def launchExpe(tab):
             w.flip()
             
         
-        HISI = core.Clock()
-        while HISI.getTime() < 1.2:
+        for frameN in range(72):
             carres[1].draw()
             carres[2].draw()
             carres[4].draw()
             carres[5].draw()
             w.flip()
 
-
-        
         numbers = [1, 2, 4, 5]
         index = random.randint(0, 3)
         squareIndex = numbers[index] #On prend l'élément à la position index dans number = on choisit un carré aléatoirement
         carres[squareIndex].contrast =  basicContrast*ContrastTest[actualDifficulty] #setLuminosity(tableauDeSteps[actualDifficulty])
         HISI = core.Clock()
-        while HISI.getTime() < 0.033: #should be 0.033
+        for frameN in range(2): #should be 0.033 sec
             carres[1].draw()
             carres[2].draw()
             carres[4].draw()
@@ -130,7 +136,7 @@ def launchExpe(tab):
                     
             tableauDeFails[actualDifficulty] = tableauDeFails[actualDifficulty] + 1  #new fail#
             for x in tableauDeFails:
-                if x>=4:
+                if x>=5:
                     if (actualDifficulty==0):
                         dataFile.write(str(basicValue) + " , " + str(ContrastTest[actualDifficulty]) + " , " + "0" + " , " + str(ContrastTest[actualDifficulty]) + "\n")
                     else:
@@ -148,8 +154,6 @@ def launchExpe(tab):
                     cross.draw()
                     w.flip()
                 actualDifficulty=0
-        
-
 
 ## PARAMETRES
 ####################################################
@@ -194,28 +198,25 @@ tableauDeCarres18= [None, carre18BotLeft, carre18BotRight, None, carre18TopLeft,
 
 tableauDeBasicValues = [15, 18.9] #[15.0, 18.9, 23.8, 29.9, 37.7]
 
-#tableauDeSteps = [1.585, 1.259, 1.122, 1.06, 1.0288, 1.0145, 1.007]
 ContrastTest = [0.415, 0.741, 0.878, 0.94, 0.9712, 0.9855, 0.993]
-
+#tableauDeSteps = [1.585, 1.259, 1.122, 1.06, 1.0288, 1.0145, 1.007]
 #ContrastTest = [0.585, 0.259, 0.122, 0.06, 0.0288, 0.0145, 0.007]
+
 globalClock = core.Clock() #measurement of the total experiment
 
 ## EXPE
 ####################################################
 
 # check for a keypress
+
+consigne = visual.TextStim(w, height=30, font="Arial", color="Black", text="Vous allez participer à une tâche durant laquelle vous allez voir 4 carrés.\n Durant chaque essai, un des 4 quatre carré va brièvement changer de luminosité.\n Nous vous demandons d'appuyer sur le clavier numérique pour indiquer quel carré parmi les 4 a effectivement changé.")
+consigne.draw()
+w.flip()
 event.waitKeys()
+
+cross = visual.TextStim(w, text="YOU ARE TOO BAD", color="white", height=30, font="Courier")
+cross.draw()
+
 
 while (len(tableauDeBasicValues) >0):
     launchExpe(tableauDeBasicValues)
-
-
-
-
-
-
-
-
-
-
-
