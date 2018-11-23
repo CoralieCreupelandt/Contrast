@@ -103,20 +103,21 @@ def launchExpe(tab):
 
         if(resp==squareIndex):
 
-            d.initValue[i] = basicValue
-            d.actualValue[i] = basicValue * tableauDeSteps[actualDifficulty]
-            d.exactitude[i] = 1
-            actualDifficulty = actualDifficulty + 1  # good resp
-
-            if(actualDifficulty==7): #already reached the top
-                d.seuil[i]=6
+            if(actualDifficulty==6): #already reached the top
+                dataFile.write(str(basicValue) + "     " + str(ContrastTest[actualDifficulty]) + "     " + "1" + "       " + str(ContrastTest[6]) + "\n")
                 return #6
+            else:
+                dataFile.write(str(basicValue) + "     " + str(ContrastTest[actualDifficulty]) + "     " + "1" + "       " + "-" + "\n")
+                actualDifficulty = actualDifficulty + 1  # good resp
+
         else:
-            # bad resp
-            tableauDeFails[actualDifficulty]= tableauDeFails[actualDifficulty]+1
-            d.initValue[i] = basicValue
-            d.actualValue[i] = basicValue * tableauDeSteps[actualDifficulty]
-            d.exactitude[i] = 1
+            tableauDeFails[actualDifficulty] = tableauDeFails[actualDifficulty] + 1  #new fail#
+            for x in tableauDeFails:
+                if x>=4:
+                    dataFile.write(str(basicValue) + "     " + str(ContrastTest[actualDifficulty]) + "     " + "0" + "       " + str(ContrastTest[actualDifficulty-1]) + "\n")
+                    return #actualDifficulty
+
+            dataFile.write(str(basicValue) + "     " + str(ContrastTest[actualDifficulty]) + "     " + "0" + "       " + "-" + "\n")
             actualDifficulty=actualDifficulty-1 #diminue la difficulte
 
             if (actualDifficulty==-1):
@@ -124,12 +125,6 @@ def launchExpe(tab):
                 cross.draw()
                 w.flip()
                 actualDifficulty=0
-
-            for x in tableauDeFails:
-                if x>=4:
-                    d.seuil[i]=actualDifficulty #difficulte précédente celle faisant 4 fails
-                    return #actualDifficulty
-
         i=i+1
 
 
@@ -143,7 +138,7 @@ output = nomExp + "_Ps" + str(numSs) + "_" + time.strftime("%Y-%m-%d_%Hh%M") + "
 ####################################################
 fileName = output
 dataFile = open(fileName + '.csv', 'w')
-dataFile.write('baseValue	actualValue exactitude  seuil\n')
+dataFile.write('baseValue       contrastValue     exactitude      seuil\n')
 d = pd.read_csv(fileName+".csv", sep=';')
 
 ## VALUES
